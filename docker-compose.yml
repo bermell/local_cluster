@@ -1,0 +1,34 @@
+version: "3"
+
+networks:
+  grafana:
+
+volumes:
+  app_data: {}
+
+services:
+  grafana:
+    image: grafana/grafana:8.4.5
+    ports:
+      - 3000:3000
+    network_mode: "host"
+    networks:
+      - grafana
+
+  app:
+    build: ./app
+    ports:
+      - 8081:80
+    volumes:
+      - app_data:/var/log
+    network_mode: "host"
+    networks:
+      - grafana
+
+  db:
+    image: grafana/tns-db:latest
+    ports:
+      - 8082:80
+    network_mode: "host"
+    networks:
+      - grafana
